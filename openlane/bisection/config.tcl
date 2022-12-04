@@ -16,7 +16,7 @@
 set ::env(PDK) "gf180mcuC"
 set ::env(STD_CELL_LIBRARY) "gf180mcu_fd_sc_mcu7t5v0"
 
-set ::env(DESIGN_NAME) DSP48
+set ::env(DESIGN_NAME) bisection
 
 set ::env(VERILOG_FILES) "\
 	$::env(CARAVEL_ROOT)/verilog/rtl/defines.v \

@@ -1,5 +1,11 @@
 `default_nettype none
-module bisection(input clk, reset , input  [1:0]z01, z02, z03, z04, z05, z06, z07, z08,z09,z010, z011, z012, z11, z12, z13, z14, z15, z16, z17, z18, z19, z110, z111, z112, output reg  [19:0] alpha, output reg  [19:0] beta);
+module bisection(
+`ifdef USE_POWER_PINS
+    inout vdd,	// User area 1 1.8V supply
+    inout vss,	// User area 1 digital ground
+`endif
+
+input clk, reset , input  [1:0]z01, z02, z03, z04, z05, z06, z07, z08,z09,z010, z011, z012, z11, z12, z13, z14, z15, z16, z17, z18, z19, z110, z111, z112, output reg  [19:0] alpha, output reg  [19:0] beta);
 
 reg  [200:0]temp;
 reg  [19:0] e;

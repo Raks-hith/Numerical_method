@@ -20,7 +20,7 @@ set ::env(DESIGN_NAME) DSP48
 
 set ::env(VERILOG_FILES) "\
 	$::env(CARAVEL_ROOT)/verilog/rtl/defines.v \
-	$::env(DESIGN_DIR)/../../verilog/rtl/DSP48.v"
+	$::env(DESIGN_DIR)/../../verilog/rtl/bisection.v"
 
 set ::env(DESIGN_IS_CORE) 0
 

@@ -22,7 +22,7 @@
 
 module bisection(
 
-input clk, reset , input  [1:0]z01, z02, z03, z04, z05, z06, z07, z08, z11, z12, z13, z14, z15, z16, z17, z18, output reg  [19:0] alpha);
+input clk, reset , input  [1:0]z01, z02, z03, z04, z11, z12, z13, z14, output reg  [19:0] alpha);
 
 reg  [200:0]temp;
 reg  [19:0] e;
@@ -63,18 +63,7 @@ c[3]= x1- x0;
 x1= {z14[1], z14};
 x0= {z04[1], z04};
 c[4]= x1- x0;
-x1= {z15[1], z15};
-x0= {z05[1], z05};
-c[5]= x1- x0;
-x1= {z16[1], z16};
-x0= {z06[1], z06};
-c[6]= x1- x0;
-x1= {z17[1], z17};
-x0= {z07[1], z07};
-c[7]= x1- x0;
-x1= {z18[1], z18};
-x0= {z08[1], z08};
-c[8]= x1- x0;
+
 
 
 
@@ -87,9 +76,9 @@ r= {1'b1, r>>1};
 else
 r= r>>1;
 
-fa = s(c[0],c[1],c[2],c[3],c[4],c[5],c[6],c[7],c[8],a);
-fb = s(c[0],c[1],c[2],c[3],c[4],c[5],c[6],c[7],c[8],b);
-fc = s(c[0],c[1],c[2],c[3],c[4],c[5],c[6],c[7],c[8],r);
+fa = s(c[0],c[1],c[2],c[3],c[4],a);
+fb = s(c[0],c[1],c[2],c[3],c[4],b);
+fc = s(c[0],c[1],c[2],c[3],c[4],r);
 
 if (abso(fc)>e)
     begin
@@ -99,7 +88,7 @@ if (abso(fc)>e)
           a =r;
           r= a+b;
           r= r>>1;
-    fc = s(c[0],c[1],c[2],c[3],c[4],c[5],c[6],c[7],c[8],r);
+    fc = s(c[0],c[1],c[2],c[3],c[4],r);
    
    
     temp= 201'd32768;
@@ -111,7 +100,7 @@ if (abso(fc)>e)
         temp= temp/r;
         alpha= temp[19:0];
        
-        z = s(0,z01,z02,z03,z04,z05,z06,z07,z08,r);
+        z = s(0,z01,z02,z03,z04,r);
         temp= 201'd8192;
         temp= temp<<15;
         
@@ -127,11 +116,7 @@ function [19:0] s;
     input [2:0] c2;
     input [2:0] c3;
     input [2:0] c4;
-    input [2:0] c5;
-    input [2:0] c6;
-    input [2:0] c7;
-    input [2:0] c8;
-
+  
     input [19:0] val;
     reg [19:0] f;
     reg [19:0] y;
@@ -211,77 +196,7 @@ function [19:0] s;
         f= f+y;
     //f= f+ c4*temp_pow;
 
-    temp_pow= temp_pow*val;
-    temp_pow = temp_pow>>15;
-    y= temp_pow[19:0];
-    if(c5 ==3'b001);
-        else if(c5 ==3'b010)
-        y = y<<1;
-        else if(c5 ==3'b000)
-        y=0;
-        else if(c5 ==3'b111)
-        y = -y;
-        else //if(x == 3'b110)
-        begin
-        y= -y;
-        y= y<<1;
-        end
-        f= f+y;
-   // f= f+ c5*temp_pow;
- 
-    temp_pow= temp_pow*val;
-    temp_pow = temp_pow>>15;
-    y= temp_pow[19:0];
-    if(c6 ==3'b001);
-        else if(c6 ==3'b010)
-        y = y<<1;
-        else if(c6 ==3'b000)
-        y=0;
-        else if(c6 ==3'b111)
-        y = -y;
-        else //if(x == 3'b110)
-        begin
-        y= -y;
-        y= y<<1;
-        end
-        f= f+y;
-    //f= f+ c6*temp_pow;
-
-    temp_pow= temp_pow*val;
-    temp_pow = temp_pow>>15;
-    y= temp_pow[19:0];
-    if(c7 ==3'b001);
-        else if(c7 ==3'b010)
-        y = y<<1;
-        else if(c7 ==3'b000)
-        y=0;
-        else if(c7 ==3'b111)
-        y = -y;
-        else //if(x == 3'b110)
-        begin
-        y= -y;
-        y= y<<1;
-        end
-        f= f+y;
-    //f= f+ c7*temp_pow;
-
-    temp_pow= temp_pow*val;
-    temp_pow = temp_pow>>15;
-    y= temp_pow[19:0];
-    if(c8 ==3'b001);
-        else if(c8 ==3'b010)
-        y = y<<1;
-        else if(c8 ==3'b000)
-        y=0;
-        else if(c8 ==3'b111)
-        y = -y;
-        else //if(x == 3'b110)
-        begin
-        y= -y;
-        y= y<<1;
-        end
-        f= f+y;
-    //f= f+ c8*temp_pow;
+   
    
    s= f;
  end      

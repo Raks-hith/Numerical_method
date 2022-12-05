@@ -31,16 +31,10 @@
 
 module user_project_wrapper #(
     parameter BITS = 32
-) (
+)(
 `ifdef USE_POWER_PINS
-    inout vdda1,	// User area 1 3.3V supply
-    inout vdda2,	// User area 2 3.3V supply
-    inout vssa1,	// User area 1 analog ground
-    inout vssa2,	// User area 2 analog ground
-    inout vccd1,	// User area 1 1.8V supply
-    inout vccd2,	// User area 2 1.8v supply
-    inout vssd1,	// User area 1 digital ground
-    inout vssd2,	// User area 2 digital ground
+    inout vdd,		// User area 5.0V supply
+    inout vss,		// User area ground
 `endif
 
     // Wishbone Slave ports (WB MI A)
@@ -56,20 +50,14 @@ module user_project_wrapper #(
     output [31:0] wbs_dat_o,
 
     // Logic Analyzer Signals
-    input  [127:0] la_data_in,
-    output [127:0] la_data_out,
-    input  [127:0] la_oenb,
+    input  [63:0] la_data_in,
+    output [63:0] la_data_out,
+    input  [63:0] la_oenb,
 
     // IOs
     input  [`MPRJ_IO_PADS-1:0] io_in,
     output [`MPRJ_IO_PADS-1:0] io_out,
     output [`MPRJ_IO_PADS-1:0] io_oeb,
-
-    // Analog (direct connection to GPIO pad---use with caution)
-    // Note that analog I/O is not available on the 7 lowest-numbered
-    // GPIO pads, and so the analog_io indexing is offset from the
-    // GPIO indexing by 7 (also upper 2 GPIOs do not have analog_io).
-    inout [`MPRJ_IO_PADS-10:0] analog_io,
 
     // Independent clock (on independent integer divider)
     input   user_clock2,
@@ -83,39 +71,41 @@ module user_project_wrapper #(
 /*--------------------------------------*/
 
 bisection mprj (
-`ifdef USE_POWER_PINS
-	.vccd1(vccd1),	// User area 1 1.8V power
-	.vssd1(vssd1),	// User area 1 digital ground
-`endif
+//`ifdef USE_POWER_PINS
+//	.vdd(vdd),	// User area 1 1.8V power
+//	.vss(vss),	// User area 1 digital ground
+//`endif
 
-    .wb_clk_i(wb_clk_i),
-    .wb_rst_i(wb_rst_i),
+    .clk(wb_clk_i),
+    .reset(wb_rst_i),
 
     // MGMT SoC Wishbone Slave
 
-    .wbs_cyc_i(wbs_cyc_i),
+  /*  .wbs_cyc_i(wbs_cyc_i),
     .wbs_stb_i(wbs_stb_i),
     .wbs_we_i(wbs_we_i),
     .wbs_sel_i(wbs_sel_i),
-    .wbs_adr_i(wbs_adr_i),
-    .wbs_dat_i(wbs_dat_i),
-    .wbs_ack_o(wbs_ack_o),
-    .wbs_dat_o(wbs_dat_o),
+    .wbs_adr_i(wbs_adr_i), */
+	.z01(wbs_dat_i[1:0]),
+	.z02(wbs_dat_i[3:2]),
+	.z03(wbs_dat_i[5:4]),
+	.z04(wbs_dat_i[7:6]),
+	.z11(wbs_dat_i[9:8]),
+	.z12(wbs_dat_i[11:10]),
+	.z13(wbs_dat_i[13:12]),
+	.z14(wbs_dat_i[15:14]),
+	.alpha(wbs_dat_o[35:16])
 
-    // Logic Analyzer
-
+  /*  // Logic Analyzer
     .la_data_in(la_data_in),
     .la_data_out(la_data_out),
     .la_oenb (la_oenb),
-
     // IO Pads
-
     .io_in (io_in),
     .io_out(io_out),
     .io_oeb(io_oeb),
-
     // IRQ
-    .irq(user_irq)
+    .irq(user_irq) */
 );
 
 endmodule	// user_project_wrapper

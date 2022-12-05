@@ -40,11 +40,11 @@ module user_project_wrapper #(
     // Wishbone Slave ports (WB MI A)
     input wb_clk_i,
     input wb_rst_i,
-    input wbs_stb_i,
-    input wbs_cyc_i,
-    input wbs_we_i,
-    input [3:0] wbs_sel_i,
-    input [31:0] wbs_dat_i,
+    //input wbs_stb_i,
+    //input wbs_cyc_i,
+    //input wbs_we_i,
+    //input [3:0] wbs_sel_i,
+    /*input [31:0] wbs_dat_i,
     input [31:0] wbs_adr_i,
     output wbs_ack_o,
     output [31:0] wbs_dat_o,
@@ -63,7 +63,7 @@ module user_project_wrapper #(
     input   user_clock2,
 
     // User maskable interrupt signals
-    output [2:0] user_irq
+    output [2:0] user_irq*/
 );
 
 /*--------------------------------------*/

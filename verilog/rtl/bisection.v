@@ -1,11 +1,28 @@
-`default_nettype none
-module bisection(
-`ifdef USE_POWER_PINS
-    inout vdd,	// User area 1 1.8V supply
-    inout vss,	// User area 1 digital ground
-`endif
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 05.12.2022 15:01:19
+// Design Name: 
+// Module Name: bisection
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
 
-input clk, reset , input  [1:0]z01, z02, z03, z04, z05, z06, z07, z08,z09,z010, z011, z012, z11, z12, z13, z14, z15, z16, z17, z18, z19, z110, z111, z112, output reg  [19:0] alpha, output reg  [19:0] beta);
+
+module bisection(
+
+input clk, reset , input  [1:0]z01, z02, z03, z04, z05, z06, z07, z08, z11, z12, z13, z14, z15, z16, z17, z18, output reg  [19:0] alpha);
 
 reg  [200:0]temp;
 reg  [19:0] e;
@@ -19,7 +36,7 @@ reg  [19:0] fb;
 reg  [19:0] fc;
 reg  [19:0]z;
 //reg  [19:0]y;
-reg  [2:0]c[12:0];
+reg  [2:0]c[8:0];
 always@(posedge clk or posedge reset)
 begin
 if(reset==1'b1)
@@ -58,18 +75,7 @@ c[7]= x1- x0;
 x1= {z18[1], z18};
 x0= {z08[1], z08};
 c[8]= x1- x0;
-x1= {z19[1], z19};
-x0= {z09[1], z09};
-c[9]= x1- x0;
-x1= {z110[1], z110};
-x0= {z010[1], z010};
-c[10]= x1- x0;
-x1= {z111[1], z111};
-x0= {z011[1], z011};
-c[11]= x1- x0;
-x1= {z112[1], z112};
-x0= {z012[1], z012};
-c[12]= x1- x0;
+
 
 
 fa= 20'b0;
@@ -81,9 +87,9 @@ r= {1'b1, r>>1};
 else
 r= r>>1;
 
-fa = s(c[0],c[1],c[2],c[3],c[4],c[5],c[6],c[7],c[8],c[9],c[10],c[11],c[12],a);
-fb = s(c[0],c[1],c[2],c[3],c[4],c[5],c[6],c[7],c[8],c[9],c[10],c[11],c[12],b);
-fc = s(c[0],c[1],c[2],c[3],c[4],c[5],c[6],c[7],c[8],c[9],c[10],c[11],c[12],r);
+fa = s(c[0],c[1],c[2],c[3],c[4],c[5],c[6],c[7],c[8],a);
+fb = s(c[0],c[1],c[2],c[3],c[4],c[5],c[6],c[7],c[8],b);
+fc = s(c[0],c[1],c[2],c[3],c[4],c[5],c[6],c[7],c[8],r);
 
 if (abso(fc)>e)
     begin
@@ -93,7 +99,7 @@ if (abso(fc)>e)
           a =r;
           r= a+b;
           r= r>>1;
-    fc = s(c[0],c[1],c[2],c[3],c[4],c[5],c[6],c[7],c[8],c[9],c[10],c[11],c[12],r);
+    fc = s(c[0],c[1],c[2],c[3],c[4],c[5],c[6],c[7],c[8],r);
    
    
     temp= 201'd32768;
@@ -105,15 +111,10 @@ if (abso(fc)>e)
         temp= temp/r;
         alpha= temp[19:0];
        
-        z = s(0,z01,z02,z03,z04,z05,z06,z07,z08,z09,z010,z011,z012,r);
+        z = s(0,z01,z02,z03,z04,z05,z06,z07,z08,r);
         temp= 201'd8192;
         temp= temp<<15;
-        if(z[19]==1)
-           
-            temp= temp/(-z);
-            else
-            temp= temp/z;
-            beta= temp[19:0];
+        
     end
    
 end
@@ -130,10 +131,7 @@ function [19:0] s;
     input [2:0] c6;
     input [2:0] c7;
     input [2:0] c8;
-    input [2:0] c9;
-    input [2:0] c10;
-    input [2:0] c11;
-    input [2:0] c12;
+
     input [19:0] val;
     reg [19:0] f;
     reg [19:0] y;
@@ -285,78 +283,6 @@ function [19:0] s;
         f= f+y;
     //f= f+ c8*temp_pow;
    
-    temp_pow= temp_pow*val;
-    temp_pow = temp_pow>>15;
-    y= temp_pow[19:0];
-    if(c9 ==3'b001);
-        else if(c9 ==3'b010)
-        y = y<<1;
-        else if(c9 ==3'b000)
-        y=0;
-        else if(c9 ==3'b111)
-        y = -y;
-        else //if(x == 3'b110)
-        begin
-        y= -y;
-        y= y<<1;
-        end
-        f= f+y;
-    //f= f+ c9*temp_pow;
-
-    temp_pow= temp_pow*val;
-    temp_pow = temp_pow>>15;
-    y= temp_pow[19:0];
-    if(c10 ==3'b001);
-        else if(c10 ==3'b010)
-        y = y<<1;
-        else if(c10 ==3'b000)
-        y=0;
-        else if(c10 ==3'b111)
-        y = -y;
-        else //if(x == 3'b110)
-        begin
-        y= -y;
-        y= y<<1;
-        end
-        f= f+y;
-    //f= f+ c10*temp_pow;
-
-    temp_pow= temp_pow*val;
-    temp_pow = temp_pow>>15;
-    y= temp_pow[19:0];
-    if(c11 ==3'b001);
-        else if(c11 ==3'b010)
-        y = y<<1;
-        else if(c11 ==3'b000)
-        y=0;
-        else if(c11 ==3'b111)
-        y = -y;
-        else //if(x == 3'b110)
-        begin
-        y= -y;
-        y= y<<1;
-        end
-        f= f+y;
-    //f= f+ c11*temp_pow;
- 
-    temp_pow= temp_pow*val;
-    temp_pow = temp_pow>>15;
-    y= temp_pow[19:0];
-    if(c12 ==3'b001);
-        else if(c12 ==3'b010)
-        y = y<<1;
-        else if(c12 ==3'b000)
-        y=0;
-        else if(c12 ==3'b111)
-        y = -y;
-        else //if(x == 3'b110)
-        begin
-        y= -y;
-        y= y<<1;
-        end
-        f= f+y;
-    //f= f+ c12*temp_pow;
- 
    s= f;
  end      
 endfunction
@@ -372,4 +298,3 @@ function [19:0] abso;
 
 
 endmodule
-`default_nettype wire

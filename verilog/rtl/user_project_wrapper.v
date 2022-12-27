@@ -44,10 +44,11 @@ module user_project_wrapper #(
     //input wbs_cyc_i,
     //input wbs_we_i,
     //input [3:0] wbs_sel_i,
-    /*input [31:0] wbs_dat_i,
-    input [31:0] wbs_adr_i,
-    output wbs_ack_o,
+    input [31:0] wbs_dat_i,
     output [31:0] wbs_dat_o,
+    /*input [31:0] wbs_adr_i,
+    output wbs_ack_o,
+   
 
     // Logic Analyzer Signals
     input  [63:0] la_data_in,

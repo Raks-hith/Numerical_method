@@ -40,13 +40,13 @@ module user_project_wrapper #(
     // Wishbone Slave ports (WB MI A)
     input wb_clk_i,
     input wb_rst_i,
-    //input wbs_stb_i,
-    //input wbs_cyc_i,
-    //input wbs_we_i,
-    //input [3:0] wbs_sel_i,
+    input wbs_stb_i,
+    input wbs_cyc_i,
+    input wbs_we_i,
+    input [3:0] wbs_sel_i,
     input [31:0] wbs_dat_i,
     output [31:0] wbs_dat_o,
-    /*input [31:0] wbs_adr_i,
+    input [31:0] wbs_adr_i,
     output wbs_ack_o,
    
 
@@ -71,7 +71,7 @@ module user_project_wrapper #(
 /* User project is instantiated  here   */
 /*--------------------------------------*/
 
-bisection mprj (
+user_proj_example mprj (
 //`ifdef USE_POWER_PINS
 //	.vdd(vdd),	// User area 1 1.8V power
 //	.vss(vss),	// User area 1 digital ground
